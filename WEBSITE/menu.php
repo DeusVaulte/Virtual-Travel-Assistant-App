@@ -1,3 +1,33 @@
+<?php 
+session_start();
+include 'connect_db.php';
+
+if (!isset($_SESSION['UserID'])) {
+    echo "Unauthorized access! Redirecting...";
+    header("refresh:2; url=login.php");
+    exit();
+}
+
+
+$UserID = $_SESSION['UserID']; // Get logged-in User ID
+
+$sql = "SELECT * FROM Users WHERE UserID = $UserID";
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $name = $row['Name'];  // Store Name in a PHP variable
+   
+} else {
+    echo "User not found.";
+}
+
+$conn->close();
+
+
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +38,7 @@
 </head>
 <body class="main">
     <div class="sidebar">
-        <h2>Account Name</h2>
+        <h2> <?php echo $name ?></h2>
     </div>
     <div class="content">
         <h1>Here are a few suggestions:</h1>

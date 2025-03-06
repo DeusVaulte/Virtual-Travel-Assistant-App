@@ -22,23 +22,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     
 
-    // Insert new user
-         $sql = "UPDATE Users 
-            SET Name = '$name', 
-                TransportBudget = $TransportBudget, 
-                AccomodationBudget = $AccomodationBudget, 
-                PreferredClimate = '$PreferredClimate', 
-                PreferredActivities = '$PreferredActivities', 
-                TravelHistory = '$TravelHistory' 
-            WHERE UserID = $UserID";
+    // Create an array to store non-empty fields
+    $updates = [];
+
+    // Only add fields that are not empty
+    if (!empty($name)) {
+        $name = $conn->real_escape_string($name);
+        $updates[] = "Name = '$name'";
+    }
+    if (!empty($TransportBudget)) {
+        $TransportBudget = floatval($TransportBudget);
+        $updates[] = "TransportBudget = $TransportBudget";
+    }
+    if (!empty($AccomodationBudget)) {
+        $AccomodationBudget = floatval($AccomodationBudget);
+        $updates[] = "AccomodationBudget = $AccomodationBudget";
+    }
+    if (!empty($PreferredClimate)) {
+        $PreferredClimate = $conn->real_escape_string($PreferredClimate);
+        $updates[] = "PreferredClimate = '$PreferredClimate'";
+    }
+    if (!empty($PreferredActivities)) {
+        $PreferredActivities = $conn->real_escape_string($PreferredActivities);
+        $updates[] = "PreferredActivities = '$PreferredActivities'";
+    }
+    if (!empty($TravelHistory)) {
+        $TravelHistory = $conn->real_escape_string($TravelHistory);
+        $updates[] = "TravelHistory = '$TravelHistory'";
+    }
+
+    // Only execute the query if there are changes
+    if (!empty($updates)) {
+        $sql = "UPDATE Users SET " . implode(", ", $updates) . " WHERE UserID = $UserID";
 
         if ($conn->query($sql) === TRUE) {
-            echo "Signup successful! Redirecting to login...";
-            header("refresh:2; url=menu.php"); // Redirect after input of pref
+            echo "Profile updated successfully! Redirecting...";
+            header("refresh:2; url=menu.php"); // Redirect after update
             exit();
         } else {
             echo "Error: " . $conn->error;
         }
+    } else {
+        echo "No changes made (all fields were empty).";
+    }
+
 
 
 
