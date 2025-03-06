@@ -1,0 +1,84 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+}
+
+.overlay {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 40px;
+    color: white;
+    text-align: center;
+    border-radius: 8px;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input, button {
+    margin: 10px 0;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 4px;
+}
+
+button {
+    background: #000;
+    color: white;
+    cursor: pointer;
+}
+
+a {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.signup { background-image: url('signup-bg.jpg'); } 
+.login { background-image: url('login-bg.jpg'); }
+.account-setup { background-image: url('setup-bg.jpg'); }
+
+.main {
+    display: flex;
+    background-color: #111;
+    color: white;
+}
+
+.sidebar {
+    width: 20%;
+    padding: 20px;
+    background: #222;
+}
+
+.content {
+    width: 80%;
+    padding: 20px;
+}
+
+.cards {
+    display: flex;
+    gap: 20px;
+}
+
+.card {
+    background: #333;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+}
