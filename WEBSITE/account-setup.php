@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $PreferredClimate = $_POST['PreferredClimate'];
     $PreferredActivities = $_POST['PreferredActivities'];
     $TravelHistory = $_POST['TravelHistory'];
+    $TransportType = $_POST['TransportType'];
 
     
 
@@ -49,6 +50,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($TravelHistory)) {
         $TravelHistory = $conn->real_escape_string($TravelHistory);
         $updates[] = "TravelHistory = '$TravelHistory'";
+    }
+    if (!empty($TransportType)) {
+        $TransportType = $conn->real_escape_string($TransportType);
+        $updates[] = "TransportType = '$TransportType'";
     }
 
     // Only execute the query if there are changes
@@ -98,6 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form action="account-setup.php" method="POST">
             <input type="text" placeholder="What should we call you?" name="name">
             <input type="text" placeholder="What’s your transport budget?" name="TransportBudget">
+            <input type="text" placeholder="What’s your transport Type?" name="TransportType">
             <input type="text" placeholder="What’s your Accomodation budget?" name="AccomodationBudget">
             <input type="text" placeholder="What is your preferred climate?" name="PreferredClimate">
             <input type="text" placeholder="What do you like to do in your travels?" name="PreferredActivities">

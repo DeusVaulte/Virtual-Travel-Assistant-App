@@ -8,25 +8,54 @@ if (!isset($_SESSION['UserID'])) {
     exit();
 }
 
-
 $UserID = $_SESSION['UserID']; // Get logged-in User ID
 
 $sql = "SELECT * FROM Users WHERE UserID = $UserID";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    $name = $row['Name'];  // Store Name in a PHP variable
-   
+    $name = $row['Name'];  
+    $accommodation_budget = $row['AccomodationBudget'];
+    $transportation_budget = $row['TransportBudget'];
+    $transport_type = $row['TransportType']; // Get transportation type
+
+    // Prepare data for API request
+    $data = array(
+        "accommodation_budget" => $accommodation_budget,
+        "transportation_budget" => $transportation_budget,
+        "transportation_type" => $transport_type // Include transport type
+    );
+
+    // Convert data to JSON
+    $json_data = json_encode($data);
+
+    // Call Python API
+    $api_url = "http://127.0.0.1:5000/suggest_destination"; // Ensure Flask server is running
+    $ch = curl_init($api_url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
+
+    $response = curl_exec($ch);
+    $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE); // Get HTTP status code
+    curl_close($ch);
+
+    // Decode JSON response
+    $decoded_response = json_decode($response, true);
+    
+    if ($http_status != 200 || !$decoded_response || !isset($decoded_response['suggested_destination'])) {
+        $suggested_destination = "No suggestion available"; // Default message
+    } else {
+        $suggested_destination = $decoded_response['suggested_destination'];
+    }
 } else {
     echo "User not found.";
+    exit();
 }
 
 $conn->close();
-
-
-
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -38,23 +67,18 @@ $conn->close();
 </head>
 <body class="main">
     <div class="sidebar">
-        <h2> <?php echo $name ?></h2>
+        <h2> <?php echo htmlspecialchars($name); ?></h2>
     </div>
     <div class="content">
         <h1>Here are a few suggestions:</h1>
-        <div class="cards">
+        <div class="card">
             <div class="card">
-                <img src="kelowna.jpg" alt="Kelowna, Canada">
-                <h3>Kelowna, Canada</h3>
-                <p>Temperature, Forest, Lakeside</p>
+                <img src="kelowna.jpg" >
+                <h3><?php echo htmlspecialchars($suggested_destination); ?></h3>
+                <p>Based on your transport preference: <?php echo htmlspecialchars($transport_type); ?></p>
                 <button>View</button>
             </div>
-            <div class="card">
-                <img src="france.jpg" alt="France">
-                <h3>France</h3>
-                <p>Temperature, Forest, Lakeside</p>
-                <button>View</button>
-            </div>
+            
         </div>
     </div>
 </body>
