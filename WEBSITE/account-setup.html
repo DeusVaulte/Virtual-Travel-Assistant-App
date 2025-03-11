@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="main" style="align-items: flex-start; background-color: #2f3440;">
+    
+    <div class="sidebar panel" style="position: fixed; left: 0; top: 0; width: 20%">
+        <div class="profile">
+            <img src="placeholder-profile.png" alt="Profile Image">
+            <h2>Account Name</h2>
+        </div>
+    </div>
+    <div class="content" style="margin-top: 20px; margin-left: 22%; padding-left: 2%;">
+        <h1 class="site-name" style="text-align:center" >Site Name</h1>
+        <h1 class="menu-heading">Here are a few suggestions:</h1>
+        <div class="cards" style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; margin-top: 20px;">
+            <div class="card">
+                <img src="kelowna.jpg" alt="Kelowna">
+                <h3><?php echo htmlspecialchars($suggested_destination); ?></h3>
+                <p>Based on your transport preference: <?php echo htmlspecialchars($transport_type); ?></p>
+                <button>View</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
