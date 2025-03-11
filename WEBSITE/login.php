@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
 
             echo "Login successful! Redirecting...";
-            header("refresh:2; url=menu.html"); // Redirect after login
+            header("refresh:2; url=account-setup.php"); // Redirect after login
             exit();
         } else {
             echo "Invalid email or password.";
