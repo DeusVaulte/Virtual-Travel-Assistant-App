@@ -29,6 +29,7 @@ CREATE TABLE Recommendation (
     RecommendationID INT AUTO_INCREMENT,
     UserID INT,
     DestinationID INT,
+    Destination VARCHAR(255),
     RecommendationDate DATE,
     Rating DECIMAL(3,2),
 

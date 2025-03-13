@@ -164,3 +164,13 @@ a {
     margin: 0;
     color: white;
 }
+
+
+.input-container {
+    margin-bottom: 20px;
+}
+
+
+button:hover {
+    background-color: #ddd;
+}

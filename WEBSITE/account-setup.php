@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($conn->query($sql) === TRUE) {
             echo "Profile updated successfully! Redirecting...";
-            header("refresh:2; url=menu.php"); // Redirect after update
+            header("refresh:2; url=testing.php"); // Redirect after update
             exit();
         } else {
             echo "Error: " . $conn->error;
@@ -77,15 +77,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $conn->close();
 }
-
-
-
-
-
-
-
-
-
 
 ?>
 

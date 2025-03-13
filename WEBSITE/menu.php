@@ -14,46 +14,15 @@ $sql = "SELECT * FROM Users WHERE UserID = $UserID";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    $name = $row['Name'];  
-    $accommodation_budget = $row['AccomodationBudget'];
-    $transportation_budget = $row['TransportBudget'];
-    $transport_type = $row['TransportType']; // Get transportation type
-
-    // Prepare data for API request
-    $data = array(
-        "accommodation_budget" => $accommodation_budget,
-        "transportation_budget" => $transportation_budget,
-        "transportation_type" => $transport_type // Include transport type
-    );
-
-    // Convert data to JSON
-    $json_data = json_encode($data);
-
-    // Call Python API
-    $api_url = "http://127.0.0.1:5000/suggest_destination"; // Ensure Flask server is running
-    $ch = curl_init($api_url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
-
-    $response = curl_exec($ch);
-    $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE); // Get HTTP status code
-    curl_close($ch);
-
-    // Decode JSON response
-    $decoded_response = json_decode($response, true);
-    
-    if ($http_status != 200 || !$decoded_response || !isset($decoded_response['suggested_destination'])) {
-        $suggested_destination = "No suggestion available"; // Default message
-    } else {
-        $suggested_destination = $decoded_response['suggested_destination'];
-    }
+    $name = $row['Name']; 
+    $tranportType = $row['TransportType']; 
+   
 } else {
     echo "User not found.";
     exit();
 }
 
+$recommendedResult = $conn->query("SELECT * FROM recommendation WHERE UserId = $UserID");
 $conn->close();
 ?>
 
@@ -70,20 +39,34 @@ $conn->close();
     <div class="sidebar panel" style="position: fixed; left: 0; top: 0; width: 20%">
         <div class="profile">
             <img src="placeholder-profile.png" alt="Profile Image">
-            <h2>Account Name</h2>
+            <h2><?php echo $name; ?></h2>
         </div>
+        <div class="button-container">
+            <button onclick="window.location.href='account-setup.php'">Update Preferences</button>
+        </div>
+        <div class="button-container">
+            <button onclick="window.location.href='logout.php'">Logout</button>
+        </div>
+        
     </div>
     <div class="content" style="margin-top: 20px; margin-left: 22%; padding-left: 2%;">
         <h1 class="site-name" style="text-align:center" >Site Name</h1>
         <h1 class="menu-heading">Here are a few suggestions:</h1>
+
+        
         <div class="cards" style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; margin-top: 20px;">
+            <?php while ($row = $recommendedResult->fetch_assoc()): ?>
             <div class="card">
-                <img src="kelowna.jpg" alt="Kelowna">
-                <h3><?php echo htmlspecialchars($suggested_destination); ?></h3>
-                <p>Based on your transport preference: <?php echo htmlspecialchars($transport_type); ?></p>
-                <button>View</button>
+                <img src="place-bg.jpg" alt="Kelowna" style="width: 300px; height: 200px;">
+                <h3><?php echo $row['Destination']; ?></h3>
+                <p>Based on your transport preference: <?php echo htmlspecialchars($tranportType); ?></p>
+                
+                <button onclick="window.location.href='delete.php?id=<?php echo $row['RecommendationID']?>'">Delete</button>
+                
             </div>
+            <?php endwhile; ?>
         </div>
+        
     </div>
 </body>
 </html>
