@@ -50,7 +50,7 @@ $conn->close();
         
     </div>
     <div class="content" style="margin-top: 20px; margin-left: 22%; padding-left: 2%;">
-        <h1 class="site-name" style="text-align:center" >Site Name</h1>
+        <h1 class="site-name" style="text-align:center" >Virtual Travel Assitant</h1>
         <h1 class="menu-heading">Here are a few suggestions:</h1>
 
         
